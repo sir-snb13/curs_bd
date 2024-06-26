@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #964b00;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.curs_bd.LoggedClController">
+    <children>
+        <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="74.0" prefWidth="674.0" style="-fx-background-color: #f5f5dc;">
+            <children>
+                <Label layoutX="240.0" layoutY="14.0" text="Железка-Авто">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="13.0" layoutY="101.0" prefHeight="285.0" prefWidth="674.0" style="-fx-background-color: #f5f5dc;">
+            <children>
+                <Label fx:id="welcomeCl" layoutX="104.0" layoutY="16.0" text="Добро пожаловать">
+                    <font>
+                        <Font size="32.0" />
+                    </font>
+                </Label>
+                <Button fx:id="addCar" layoutX="234.0" layoutY="105.0" mnemonicParsing="false" onAction="#switchCarAdd" prefHeight="26.0" prefWidth="206.0" text="Добавить Машину" />
+                <Button layoutX="234.0" layoutY="220.0" mnemonicParsing="false" text="Посмотреть запчасти для машины" />
+                <Button fx:id="change" layoutX="234.0" layoutY="162.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="206.0" text="Изменить личные данные" />
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>

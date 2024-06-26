@@ -42,6 +42,8 @@ public class RegEmpController implements Initializable {
 
     @FXML
     private TextField nameEmp;
+    @FXML
+    private TextField pswdEmp;
 
     @FXML
     private Button backEmp;
@@ -60,13 +62,13 @@ public class RegEmpController implements Initializable {
         loginEmployee.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                EmpUtil.logInEmp(event, nameEmp.getText(), adrEmp.getText());
+                RegModel.logInEmp(event, nameEmp.getText(), adrEmp.getText(), pswdEmp.getText());
             }
         });
         signUpEmp.setOnAction((new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                EmpUtil.signUpEmp(event, nameEmp.getText(), adrEmp.getText());
+                RegModel.signUpEmp(event, nameEmp.getText(), adrEmp.getText(), pswdEmp.getText());
             }
         }));
     }
