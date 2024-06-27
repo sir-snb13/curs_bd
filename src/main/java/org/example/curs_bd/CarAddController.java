@@ -32,18 +32,13 @@ public class CarAddController implements Initializable {
     @FXML
     private Button add;
 
-
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         add.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                CarAddModel.carAdd(event, plate.toString(), brand.toString(), model.toString(), color.toString(), mileage.toString(), Singleton.getInstance().getId());
-
-
+                CarAddModel.carAdd(event, plate.getText(), brand.getText(), model.getText(), color.getText(), mileage.getText(), Singleton.getInstance().getId());
             }
         });
-
     }
 }

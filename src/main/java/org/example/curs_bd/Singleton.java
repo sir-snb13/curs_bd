@@ -26,7 +26,7 @@ public class Singleton {
         this.id = id;
     }
     public void setName(String name){
-        this.name = this.name;
+        this.name = name;
     }
 
 }

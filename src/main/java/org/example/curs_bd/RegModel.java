@@ -238,6 +238,7 @@ public class RegModel {
                     int clientId = resultSet.getInt("owner_id");
                     String name = resultSet.getString("name");
                     Singleton.getInstance().setName(name);
+                    System.out.println(Singleton.getInstance().getName());
                     Singleton.getInstance().setId(clientId);
                     System.out.println(Singleton.getInstance().getId());
                 }
@@ -304,6 +305,8 @@ public class RegModel {
                     String retrievedAddress = resultSet.getString("address");
                     String retrievedPhone = resultSet.getString("phone");
                     if (retrievedAddress.equals(address) && retrievedPhone.equals(phone)) {
+                        Singleton.getInstance().setName(username);
+                        System.out.println(Singleton.getInstance().getName());
                         Singleton.getInstance().setId(clientId);
                         System.out.println(Singleton.getInstance().getId());
                         changeSceneCl(event, "loggedCl.fxml", username);

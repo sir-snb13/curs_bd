@@ -66,13 +66,14 @@ public class CarAddModel {
                     al.setContentText("Пустой цвет машины");
                     al.show();
                 } else {
-                    psInsert = connection.prepareStatement("INSERT INTO cars (license_plate, brand, model, color, mileage, owner_id) VALUES (?, ?, ?, ?, ?, ?)");
-                    psInsert.setString(1, plate);
-                    psInsert.setString(2, brand);
-                    psInsert.setString(3, model);
+                    psInsert = connection.prepareStatement("INSERT INTO cars (owner_id, model, brand, color, mileage, license_plate) VALUES (?, ?, ?, ?, ?, ?)");
+                    psInsert.setInt(1, owner_id);
+                    psInsert.setString(2, model);
+                    psInsert.setString(3, brand);
                     psInsert.setString(4, color);
                     psInsert.setString(5, mileage);
-                    psInsert.setInt(6, owner_id);
+                    psInsert.setString(6, plate);
+
                     psInsert.executeUpdate(); // Execute the insert statement
 
                     changeScene(event, "loggedCl.fxml", Singleton.getInstance().getName());
