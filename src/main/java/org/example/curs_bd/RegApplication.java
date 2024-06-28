@@ -12,7 +12,7 @@ public class RegApplication extends Application {
     public void start(Stage stage) throws Exception {
         try {
             Parent root = FXMLLoader.load(getClass().getResource("signUp.fxml"));
-            stage.setTitle("Регистрация");
+            stage.setTitle("Железка-авто");
             stage.setScene(new Scene(root, 700, 400));
             stage.show();
         }catch (Exception e){

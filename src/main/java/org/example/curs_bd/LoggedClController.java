@@ -25,12 +25,23 @@ public class LoggedClController {
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
+    }
+    public void logOut(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("signUp.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        Singleton.getInstance().setId(null);
+        Singleton.getInstance().setName(null);
     }
     @FXML
     private Label welcomeCl;
 
     @FXML
     private Button addCar;
+    private Button logOut;
 
     @FXML
     private Button change;
