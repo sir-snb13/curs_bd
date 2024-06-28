@@ -27,6 +27,15 @@ public class LoggedClController {
         stage.show();
 
     }
+
+    public void switchUpdateData(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(getClass().getResource("updateClData.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
     public void logOut(ActionEvent event) throws IOException{
         Parent root = FXMLLoader.load(getClass().getResource("signUp.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -50,6 +59,7 @@ public class LoggedClController {
 
     @FXML
     private Button addCar;
+    @FXML
     private Button logOut;
 
     @FXML
