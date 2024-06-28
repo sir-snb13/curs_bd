@@ -36,6 +36,15 @@ public class LoggedClController {
         Singleton.getInstance().setId(null);
         Singleton.getInstance().setName(null);
     }
+    public void switchCarParts(ActionEvent event) throws IOException{
+        Parent root = FXMLLoader.load(getClass().getResource("carParts.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        Singleton.getInstance().setId(null);
+        Singleton.getInstance().setName(null);
+    }
     @FXML
     private Label welcomeCl;
 
@@ -45,6 +54,7 @@ public class LoggedClController {
 
     @FXML
     private Button change;
+    private Button carParts;
 
     @FXML
     private Label welcomeEmp;

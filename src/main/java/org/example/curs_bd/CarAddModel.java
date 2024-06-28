@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 
-public class CarAddModel {
+public class CarAddModel{
 
     public static void changeScene(ActionEvent event, String fxmlFile) {
         Parent root = null;

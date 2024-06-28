@@ -24,7 +24,7 @@
                     </font>
                 </Label>
                 <Button fx:id="addCar" layoutX="234.0" layoutY="105.0" mnemonicParsing="false" onAction="#switchCarAdd" prefHeight="26.0" prefWidth="206.0" text="Добавить Машину" />
-                <Button layoutX="234.0" layoutY="220.0" mnemonicParsing="false" text="Посмотреть запчасти для машины" />
+                <Button fx:id="carParts" layoutX="234.0" layoutY="220.0" mnemonicParsing="false" onAction="#switchCarParts" text="Посмотреть запчасти для машины" />
                 <Button fx:id="change" layoutX="234.0" layoutY="162.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="206.0" text="Изменить личные данные" />
             <Button fx:id="logOut" layoutX="14.0" layoutY="93.0" mnemonicParsing="false" onAction="#logOut" text="Выйти" />
             </children>
