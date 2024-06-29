@@ -2,7 +2,6 @@ package org.example.curs_bd;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -11,7 +10,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class PartsAddController implements Initializable {
@@ -21,6 +19,12 @@ public class PartsAddController implements Initializable {
 
     @FXML
     private Button back;
+
+    @FXML
+    private Button delete;
+
+    @FXML
+    private Button update;
 
     @FXML
     private TextField category;
@@ -81,6 +85,21 @@ public class PartsAddController implements Initializable {
 
             // Обработка нажатия на кнопку "Назад"
             back.setOnAction(event -> PartsAddModel.goBack(event));
+
+            // Обработка нажатия на кнопку "Обновить"
+            update.setOnAction(event -> PartsAddModel.changeScene(event, "partsAdd.fxml"));
+
+            // Обработка нажатия на кнопку "Удалить"
+            delete.setOnAction(event -> {
+                try {
+                    PartsAddModel.partDel(event, category.getText(), Double.parseDouble(price.getText()), model.getText(), serial_num.getText(), Integer.parseInt(service_id.getText()));
+                    // Обновление таблицы после удаления запчасти
+                    partsList.clear();
+                    PartsAddModel.getParts(partsList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (Exception e) {
             e.printStackTrace();
         }

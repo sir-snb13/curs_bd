@@ -28,6 +28,11 @@ public class CarPartsController implements Initializable {
 
     @FXML
     private TextField model;
+    @FXML
+    private Button delete;
+
+    @FXML
+    private Button update;
 
     @FXML
     private TableColumn<CarParts, String> modelCol;
@@ -60,6 +65,12 @@ public class CarPartsController implements Initializable {
             @Override
             public void handle(ActionEvent event) {
                 CarPartsModel.changeScene(event,"carPartsBuy.fxml");
+            }
+        });
+        back.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CarPartsModel.goBack(event);
             }
         });
     }

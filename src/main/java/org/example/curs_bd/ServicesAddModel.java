@@ -18,7 +18,6 @@ public class ServicesAddModel {
 
     public static void changeScene(ActionEvent event, String fxmlFile) {
         try {
-            // Ensure the correct path to the FXML file
             FXMLLoader loader = new FXMLLoader(ServicesAddModel.class.getResource(fxmlFile));
             Parent root = loader.load();
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -51,7 +50,37 @@ public class ServicesAddModel {
             psInsert.setString(6, category);
 
             psInsert.executeUpdate();
-            changeScene(event, "/org/example/curs_bd/servicesAdd.fxml");
+            changeScene(event, "/org/example/curs_bd/serviceAdd.fxml");
+
+        } catch (SQLException e) {
+            showAlert("Error", "SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void serviceDel(ActionEvent event, Date begin, Date end, Double hours, Integer id, String category) {
+        if (category.isEmpty()) {
+            showAlert("Error", "Пустой номер машины");
+            return;
+        }
+
+        try (Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
+             PreparedStatement psDelete = connection.prepareStatement("DELETE FROM services WHERE start_date = ? AND end_date = ? AND hours_worked = ? AND car_id = ? AND employee_id = ? AND category = ?")) {
+
+            psDelete.setDate(1, begin);
+            psDelete.setDate(2, end);
+            psDelete.setDouble(3, hours);
+            psDelete.setInt(4, id);
+            psDelete.setInt(5, Singleton.getInstance().getId());
+            psDelete.setString(6, category);
+
+            int rowsAffected = psDelete.executeUpdate();
+            if (rowsAffected > 0) {
+                showAlert("Success", "Service deleted successfully.");
+            } else {
+                showAlert("Error", "No matching service found to delete.");
+            }
+            changeScene(event, "/org/example/curs_bd/serviceAdd.fxml");
 
         } catch (SQLException e) {
             showAlert("Error", "SQL Error: " + e.getMessage());

@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 
-public class CarAddModel{
+public class CarAddModel {
 
     public static void changeScene(ActionEvent event, String fxmlFile) {
         Parent root = null;
@@ -30,6 +30,7 @@ public class CarAddModel{
         stage.setScene(new Scene(root, 700, 400));
         stage.show();
     }
+
     public static void changeSceneBack(ActionEvent event, String fxmlFile) {
         Parent root = null;
         try {
@@ -44,7 +45,6 @@ public class CarAddModel{
         stage.show();
     }
 
-
     public static void carAdd(ActionEvent event, String plate, String brand, String model, String color, String mileage, int owner_id) {
         Connection connection = null;
         PreparedStatement psInsert = null;
@@ -57,32 +57,9 @@ public class CarAddModel{
             resultSet = psCheckUserExists.executeQuery();
 
             if (resultSet.isBeforeFirst()) {
-                System.out.println("Машина с таким номером уже существует");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Вы не можете использовать такой номер машины");
-                alert.show();
+                showAlert(Alert.AlertType.ERROR, "Машина с таким номером уже существует", "Вы не можете использовать такой номер машины");
             } else {
-                if (plate.isEmpty()) {
-                    System.out.println("Пустой номер машины");
-                    Alert al = new Alert(Alert.AlertType.ERROR);
-                    al.setContentText("Пустой номер машины");
-                    al.show();
-                } else if (brand.isEmpty()) {
-                    System.out.println("Пустое поле марки");
-                    Alert al = new Alert(Alert.AlertType.ERROR);
-                    al.setContentText("Пустая марка машины");
-                    al.show();
-                } else if (model.isEmpty()) {
-                    System.out.println("Пустое поле модели");
-                    Alert al = new Alert(Alert.AlertType.ERROR);
-                    al.setContentText("Пустая модель машины");
-                    al.show();
-                } else if (color.isEmpty()) {
-                    System.out.println("Пустое поле цвета");
-                    Alert al = new Alert(Alert.AlertType.ERROR);
-                    al.setContentText("Пустой цвет машины");
-                    al.show();
-                } else {
+                if (validateCarFields(plate, brand, model, color)) {
                     psInsert = connection.prepareStatement("INSERT INTO cars (owner_id, model, brand, color, mileage, license_plate) VALUES (?, ?, ?, ?, ?, ?)");
                     psInsert.setInt(1, owner_id);
                     psInsert.setString(2, model);
@@ -99,34 +76,33 @@ public class CarAddModel{
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
+            closeResources(resultSet, psCheckUserExists, psInsert, connection);
+        }
+    }
+
+    public static void carDel(ActionEvent event, String plate, String brand, String model, String color, String mileage, int owner_id) {
+        Connection connection = null;
+        PreparedStatement psDelete = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
+
+            if (validateCarFields(plate, brand, model, color)) {
+                psDelete = connection.prepareStatement("DELETE FROM cars WHERE owner_id = ? AND model = ? AND brand = ? AND color = ? AND mileage = ? AND license_plate = ?");
+                psDelete.setInt(1, owner_id);
+                psDelete.setString(2, model);
+                psDelete.setString(3, brand);
+                psDelete.setString(4, color);
+                psDelete.setInt(5, Integer.parseInt(mileage));
+                psDelete.setString(6, plate);
+
+                psDelete.executeUpdate(); // Execute the delete statement
+
+                changeScene(event, "carAdd.fxml");
             }
-            if (psCheckUserExists != null) {
-                try {
-                    psCheckUserExists.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (psInsert != null) {
-                try {
-                    psInsert.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeResources(null, null, psDelete, connection);
         }
     }
 
@@ -148,24 +124,65 @@ public class CarAddModel{
             mileageCol.setCellValueFactory(new PropertyValueFactory<>("mileage"));
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        } finally {
+            closeResources(null, psCheckUser, null, connection);
         }
     }
 
     public static ObservableList<Cars> getCars(ObservableList<Cars> carList) throws SQLException, ClassNotFoundException {
         Connection connection = null;
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
-        PreparedStatement pst = connection.prepareStatement("SELECT * FROM cars Where owner_id = ?");
-        pst.setInt(1, Singleton.getInstance().getId());
-        ResultSet rs = pst.executeQuery();
-        while (rs.next()) {
-            carList.add(new Cars(rs.getString("license_plate"), rs.getString("model"), rs.getString("brand"), rs.getString("color"), rs.getInt("mileage")));
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
+            pst = connection.prepareStatement("SELECT * FROM cars WHERE owner_id = ?");
+            pst.setInt(1, Singleton.getInstance().getId());
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                carList.add(new Cars(rs.getString("license_plate"), rs.getString("model"), rs.getString("brand"), rs.getString("color"), rs.getInt("mileage")));
+            }
+        } finally {
+            closeResources(rs, pst, null, connection);
         }
-        rs.close();
-        pst.close();
-        connection.close();
         return carList;
     }
-    public static void goBack(ActionEvent event){{
+
+    public static void goBack(ActionEvent event) {
         changeSceneBack(event, "loggedCl.fxml");
-    }}
+    }
+
+    private static boolean validateCarFields(String plate, String brand, String model, String color) {
+        if (plate.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Пустой номер машины", "Пожалуйста, введите номер машины.");
+            return false;
+        } else if (brand.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Пустое поле марки", "Пожалуйста, введите марку машины.");
+            return false;
+        } else if (model.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Пустое поле модели", "Пожалуйста, введите модель машины.");
+            return false;
+        } else if (color.isEmpty()) {
+            showAlert(Alert.AlertType.ERROR, "Пустое поле цвета", "Пожалуйста, введите цвет машины.");
+            return false;
+        }
+        return true;
+    }
+
+    private static void showAlert(Alert.AlertType alertType, String title, String content) {
+        Alert alert = new Alert(alertType);
+        alert.setTitle(title);
+        alert.setContentText(content);
+        alert.show();
+    }
+
+    private static void closeResources(ResultSet rs, PreparedStatement ps1, PreparedStatement ps2, Connection connection) {
+        try {
+            if (rs != null) rs.close();
+            if (ps1 != null) ps1.close();
+            if (ps2 != null) ps2.close();
+            if (connection != null) connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

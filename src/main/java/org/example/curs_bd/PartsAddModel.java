@@ -79,6 +79,85 @@ public class PartsAddModel {
         }
     }
 
+    public static void partDel(ActionEvent event, String category, double price, String model, String serialNumber, int serviceId) {
+        Connection connection = null;
+        PreparedStatement psDelete = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
+
+            psDelete = connection.prepareStatement("DELETE FROM parts WHERE category = ? AND price = ? AND model = ? AND serial_number = ? AND service_id = ?");
+            psDelete.setString(1, category);
+            psDelete.setDouble(2, price);
+            psDelete.setString(3, model);
+            psDelete.setString(4, serialNumber);
+            psDelete.setInt(5, serviceId);
+
+            psDelete.executeUpdate();
+            changeScene(event, "partsAdd.fxml");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("SQL Error: " + e.getMessage());
+            alert.show();
+        } finally {
+            if (psDelete != null) {
+                try {
+                    psDelete.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public static void partUpdate(ActionEvent event, String category, double price, String model, String serialNumber, int serviceId) {
+        Connection connection = null;
+        PreparedStatement psUpdate = null;
+        try {
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
+
+            psUpdate = connection.prepareStatement("UPDATE parts SET category = ?, price = ?, model = ?, serial_number = ?, service_id = ? WHERE serial_number = ?");
+            psUpdate.setString(1, category);
+            psUpdate.setDouble(2, price);
+            psUpdate.setString(3, model);
+            psUpdate.setString(4, serialNumber);
+            psUpdate.setInt(5, serviceId);
+            psUpdate.setString(6, serialNumber);
+
+            psUpdate.executeUpdate();
+            changeScene(event, "partsAdd.fxml");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("SQL Error: " + e.getMessage());
+            alert.show();
+        } finally {
+            if (psUpdate != null) {
+                try {
+                    psUpdate.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (connection != null) {
+                try {
+                    connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
     public static void initializeParts(TableColumn<Parts, String> categoryCol,
                                        TableColumn<Parts, Double> priceCol,
                                        TableColumn<Parts, String> modelCol,

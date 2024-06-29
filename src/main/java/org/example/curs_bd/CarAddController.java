@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CarAddController implements Initializable {
-    Cars car = null;
     ObservableList<Cars> carList = FXCollections.observableArrayList();
 
     @FXML
@@ -24,6 +23,9 @@ public class CarAddController implements Initializable {
 
     @FXML
     private TextField brand;
+
+    @FXML
+    private Button delete;
 
     @FXML
     private TableColumn<Cars, String> brandCol;
@@ -39,6 +41,8 @@ public class CarAddController implements Initializable {
 
     @FXML
     private Button back;
+    @FXML
+    private Button update;
 
     @FXML
     private TextField mileage;
@@ -67,19 +71,44 @@ public class CarAddController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+
         add.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 CarAddModel.carAdd(event, plate.getText(), brand.getText(), model.getText(), color.getText(), mileage.getText(), Singleton.getInstance().getId());
+                refreshCarList();
             }
         });
+
         back.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 CarAddModel.goBack(event);
-                carList = FXCollections.observableArrayList();
             }
         });
 
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CarAddModel.carDel(event, plate.getText(), brand.getText(), model.getText(), color.getText(), mileage.getText(), Singleton.getInstance().getId());
+                refreshCarList();
+            }
+        });
+        update.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                CarAddModel.changeScene(event, "carAdd.fxml");
+            }
+        });
+    }
+
+    private void refreshCarList() {
+        carList.clear();
+        try {
+            CarAddModel.getCars(carList);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        cars.setItems(carList);
     }
 }

@@ -28,6 +28,8 @@
                 <TextField fx:id="serial_num" layoutX="395.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
                 <TextField fx:id="service_id" layoutX="477.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
                 <Button fx:id="add" layoutX="574.0" layoutY="226.0" mnemonicParsing="false" text="Добавить" />
+                <Button fx:id="delete" layoutX="578.0" layoutY="53.0" mnemonicParsing="false" text="Удалить" />
+                <Button fx:id="update" layoutX="573.0" layoutY="140.0" mnemonicParsing="false" text="Обновить" />
                 <TableView fx:id="parts" layoutX="133.0" layoutY="74.0" prefHeight="200.0" prefWidth="425.0">
                     <columns>
                         <TableColumn fx:id="categoryCol" prefWidth="81.60003662109375" text="Категория" />

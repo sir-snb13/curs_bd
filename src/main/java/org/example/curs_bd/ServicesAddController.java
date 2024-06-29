@@ -19,6 +19,11 @@ public class ServicesAddController implements Initializable {
 
     @FXML
     private Button add;
+    @FXML
+    private Button delete;
+
+    @FXML
+    private Button update;
 
     @FXML
     private Button back;
@@ -80,5 +85,7 @@ public class ServicesAddController implements Initializable {
         });
 
         back.setOnAction(event -> ServicesAddModel.goBack(event));
+        update.setOnAction(event -> ServicesAddModel.changeScene(event, "servicesAdd.fxml"));
+        delete.setOnAction(event -> ServicesAddModel.serviceDel(event, Date.valueOf(begin.getText()), Date.valueOf(finish.getText()), Double.parseDouble(hours.getText()), Integer.parseInt(color.getText()), category.getText()));
     }
 }
