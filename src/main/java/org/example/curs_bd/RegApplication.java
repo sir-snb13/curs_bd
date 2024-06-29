@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class RegApplication extends Application {
-
+    ///
     @Override
     public void start(Stage stage) throws Exception {
         try {
