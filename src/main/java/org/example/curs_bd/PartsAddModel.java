@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
@@ -22,6 +23,10 @@ public class PartsAddModel {
             root = loader.load();
         } catch (IOException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Scene change error: " + e.getMessage());
+            alert.show();
         }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 700, 400));
@@ -34,7 +39,12 @@ public class PartsAddModel {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
 
-            if (!category.isEmpty() && !model.isEmpty() && !serialNumber.isEmpty()) {
+            if (category.isEmpty() || model.isEmpty() || serialNumber.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Все поля должны быть заполнены");
+                alert.show();
+            } else {
                 psInsert = connection.prepareStatement("INSERT INTO parts (category, price, model, serial_number, service_id) VALUES (?, ?, ?, ?, ?)");
                 psInsert.setString(1, category);
                 psInsert.setDouble(2, price);
@@ -42,13 +52,15 @@ public class PartsAddModel {
                 psInsert.setString(4, serialNumber);
                 psInsert.setInt(5, serviceId);
 
-                psInsert.executeUpdate(); // Execute the insert statement
-
-                // Предполагаем, что есть сцена partsAdd.fxml для подтверждения добавления запчасти
+                psInsert.executeUpdate();
                 changeScene(event, "partsAdd.fxml");
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("SQL Error: " + e.getMessage());
+            alert.show();
         } finally {
             if (psInsert != null) {
                 try {
@@ -129,6 +141,6 @@ public class PartsAddModel {
     }
 
     public static void goBack(ActionEvent event) {
-        changeScene(event, "previousScene.fxml");
+        changeScene(event, "loggedEmp.fxml");
     }
 }

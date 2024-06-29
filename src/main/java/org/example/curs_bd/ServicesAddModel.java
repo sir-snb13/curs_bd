@@ -1,6 +1,5 @@
 package org.example.curs_bd;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
@@ -15,67 +14,48 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.sql.*;
 
-public class ServicesAddModel{
+public class ServicesAddModel {
 
     public static void changeScene(ActionEvent event, String fxmlFile) {
         Parent root = null;
         try {
-            FXMLLoader loader = new FXMLLoader(RegModel.class.getResource(fxmlFile));
+            FXMLLoader loader = new FXMLLoader(ServicesAddModel.class.getResource(fxmlFile));
             root = loader.load();
-            ServicesAddController servicesAddController = loader.getController();
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("IOException occurred while loading the FXML file.");
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Exception occurred while changing scene.");
-        }
-        if (root != null) {
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root, 700, 400));
-            stage.show();
-        } else {
-            System.err.println("Root is null, unable to change scene.");
-        }
-    }
-
-    public static void changeSceneBack(ActionEvent event, String fxmlFile) {
-        Parent root = null;
-        try {
-            FXMLLoader loader = new FXMLLoader(RegModel.class.getResource(fxmlFile));
-            root = loader.load();
-            LoggedEmpConroller loggedEmpConroller = loader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Scene change error: " + e.getMessage());
+            alert.show();
         }
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root, 700, 400));
         stage.show();
     }
 
+    public static void changeSceneBack(ActionEvent event, String fxmlFile) {
+        Parent root = null;
+        try {
+            FXMLLoader loader = new FXMLLoader(ServicesAddModel.class.getResource(fxmlFile));
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("Scene change error: " + e.getMessage());
+            alert.show();
+        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(new Scene(root, 700, 400));
+        stage.show();
+    }
 
     public static void serviceAdd(ActionEvent event, Date begin, Date end, Double hours, Integer id, String category) {
         Connection connection = null;
         PreparedStatement psInsert = null;
-        ResultSet resultSet = null;
         try {
-            System.out.println("Параметры метода:");
-            System.out.println("Begin Date: " + begin);
-            System.out.println("End Date: " + end);
-            System.out.println("Hours Worked: " + hours);
-            System.out.println("Car ID: " + id);
-            System.out.println("Category: " + category);
-
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
-
-            if (category.isEmpty()) {
-                System.out.println("Пустой номер машины");
-                Alert al = new Alert(Alert.AlertType.ERROR);
-                al.setTitle("Error");
-                al.setHeaderText("Error");
-                al.setContentText("Пустой номер машины");
-                al.show();
-            } else {
+            if (!category.isEmpty()) {
                 psInsert = connection.prepareStatement("INSERT INTO services (start_date, end_date, hours_worked, car_id, employee_id, category) VALUES (?, ?, ?, ?, ?, ?)");
                 psInsert.setDate(1, begin);
                 psInsert.setDate(2, end);
@@ -86,18 +66,20 @@ public class ServicesAddModel{
 
                 psInsert.executeUpdate(); // Execute the insert statement
 
-                changeScene(event, "servicesAdd.fxml");
+                changeScene(event, "carAdd.fxml");
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setContentText("Пустой номер машины");
+                alert.show();
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error");
+            alert.setContentText("SQL Error: " + e.getMessage());
+            alert.show();
         } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
             if (psInsert != null) {
                 try {
                     psInsert.close();
@@ -115,27 +97,16 @@ public class ServicesAddModel{
         }
     }
 
-
-
     public static void initializeServices(TableColumn<Services, Date> beginCol,
                                           TableColumn<Services, Date> finishCol,
                                           TableColumn<Services, Double> hoursCol,
                                           TableColumn<Services, Integer> id_carCol,
                                           TableColumn<Services, String> categoryCol) {
-        Connection connection = null;
-        PreparedStatement psCheckUser = null;
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
-            psCheckUser = connection.prepareStatement("SELECT * FROM cars WHERE owner_id = ?");
-            psCheckUser.setInt(1, Singleton.getInstance().getId());
-            beginCol.setCellValueFactory(new PropertyValueFactory<>("date_begin"));
-            finishCol.setCellValueFactory(new PropertyValueFactory<>("date_end"));
-            hoursCol.setCellValueFactory(new PropertyValueFactory<>("hours_worked"));
-            id_carCol.setCellValueFactory(new PropertyValueFactory<>("car_id"));
-            categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        beginCol.setCellValueFactory(new PropertyValueFactory<>("start_date"));
+        finishCol.setCellValueFactory(new PropertyValueFactory<>("end_date"));
+        hoursCol.setCellValueFactory(new PropertyValueFactory<>("hours_worked"));
+        id_carCol.setCellValueFactory(new PropertyValueFactory<>("car_id"));
+        categoryCol.setCellValueFactory(new PropertyValueFactory<>("category"));
     }
 
     public static ObservableList<Services> getServices(ObservableList<Services> servicesList) throws SQLException, ClassNotFoundException {
@@ -155,14 +126,6 @@ public class ServicesAddModel{
                 double hoursWorked = rs.getDouble("hours_worked");
                 int carId = rs.getInt("car_id");
                 String category = rs.getString("category");
-
-                // Логирование для отладки
-                System.out.println("Fetched service: ");
-                System.out.println("Start Date: " + dateBegin);
-                System.out.println("End Date: " + dateEnd);
-                System.out.println("Hours Worked: " + hoursWorked);
-                System.out.println("Car ID: " + carId);
-                System.out.println("Category: " + category);
 
                 servicesList.add(new Services(dateBegin, dateEnd, hoursWorked, carId, category));
             }
@@ -196,8 +159,7 @@ public class ServicesAddModel{
         return servicesList;
     }
 
-
-    public static void goBack(ActionEvent event){{
+    public static void goBack(ActionEvent event) {
         changeSceneBack(event, "loggedEmp.fxml");
-    }}
+    }
 }

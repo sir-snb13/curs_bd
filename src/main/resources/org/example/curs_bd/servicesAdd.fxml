@@ -25,7 +25,7 @@
                 <TextField fx:id="begin" layoutX="133.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
                 <TextField fx:id="finish" layoutX="215.0" layoutY="48.0" prefHeight="26.0" prefWidth="81.0" />
                 <TextField fx:id="hours" layoutX="297.0" layoutY="48.0" prefHeight="26.0" prefWidth="97.0" />
-                <TextField fx:id="color" layoutX="395.0" layoutY="48.0" onAction="#idCar" prefHeight="26.0" prefWidth="82.0" />
+                <TextField fx:id="color" layoutX="395.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
                 <TextField fx:id="category" layoutX="477.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
                 <Button fx:id="add" layoutX="574.0" layoutY="226.0" mnemonicParsing="false" text="Добавить" />
                 <TableView fx:id="service" layoutX="133.0" layoutY="74.0" prefHeight="200.0" prefWidth="425.0">

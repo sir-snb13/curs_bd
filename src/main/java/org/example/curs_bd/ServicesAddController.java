@@ -3,17 +3,16 @@ package org.example.curs_bd;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.net.URL;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ServicesAddController implements Initializable {
@@ -59,11 +58,6 @@ public class ServicesAddController implements Initializable {
     @FXML
     private TableView<Services> service;
 
-    @FXML
-    void idCar(ActionEvent event) {
-
-    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         ServicesAddModel.initializeServices(beginCol, finishCol, hoursCol, id_carCol, categoryCol);
@@ -73,19 +67,19 @@ public class ServicesAddController implements Initializable {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-        add.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        add.setOnAction(event -> {
+            try {
                 ServicesAddModel.serviceAdd(event, Date.valueOf(begin.getText()), Date.valueOf(finish.getText()), Double.parseDouble(hours.getText()), Integer.parseInt(color.getText()), category.getText());
+                // Обновление таблицы после добавления новой услуги
+                servicesList.clear();
+                ServicesAddModel.getServices(servicesList);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
-        back.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                ServicesAddModel.goBack(event);
-                servicesList = FXCollections.observableArrayList();
-            }
-        });
+
+        back.setOnAction(event -> ServicesAddModel.goBack(event));
     }
+
 
 }
