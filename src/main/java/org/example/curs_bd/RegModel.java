@@ -90,6 +90,8 @@ public class RegModel {
                     resultSet = preparedStatement.executeQuery();
 
                     if (resultSet.next()) {
+                        String employeeName = resultSet.getString("name");
+                        Singleton.getInstance().setName(employeeName);
                         int employeeId = resultSet.getInt("employee_id");
                         Singleton.getInstance().setId(employeeId);
                         System.out.println(Singleton.getInstance().getId());
@@ -147,7 +149,7 @@ public class RegModel {
         ResultSet resultSet = null;
         try {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/auto_repair_shop", "root", "");
-            preparedStatement = connection.prepareStatement("SELECT address, password, employee_id FROM employees where name = ? AND password = ?");
+            preparedStatement = connection.prepareStatement("SELECT address, password, employee_id, name FROM employees where name = ? AND password = ?");
             preparedStatement.setString(1, username);
             preparedStatement.setString(2, password);
             resultSet = preparedStatement.executeQuery();
@@ -163,6 +165,8 @@ public class RegModel {
                     String retrievedPassword = resultSet.getString("password");
                     String retrievedAddress = resultSet.getString("address");
                     if (retrievedPassword.equals(password) && retrievedAddress.equals(address)) {
+                        String employeeName = resultSet.getString("name");
+                        Singleton.getInstance().setName(employeeName);
                         Singleton.getInstance().setId(employeeId);
                         System.out.println(Singleton.getInstance().getId());
                         changeSceneEmp(event, "loggedEmp.fxml", username);

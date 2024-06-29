@@ -11,12 +11,13 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LoggedEmpConroller {
     private Stage stage;
     private Scene scene;
     public void switchServicesAdd(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("servicesAdd.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("servicesAdd.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -24,7 +25,7 @@ public class LoggedEmpConroller {
 
     }
     public void switchPartsAdd(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("partsAdd.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("partsAdd.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -48,7 +49,7 @@ public class LoggedEmpConroller {
     private Label welcomeEmp;
 
     public void logOut(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getResource("signUp.fxml"));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("signUp.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -57,8 +58,16 @@ public class LoggedEmpConroller {
         Singleton.getInstance().setName(null);
     }
 
-    public void setEmpInf(String username){
-        welcomeEmp.setText("Добро пожаловать " + username + "!");
+    public void switchUpdateEmpData(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("updateEmpData.fxml")));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public void setEmpInf(String userName){
+        welcomeEmp.setText("Добро пожаловать " + userName + "!");
     }
 
 }
