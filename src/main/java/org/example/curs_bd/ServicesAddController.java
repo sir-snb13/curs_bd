@@ -2,7 +2,6 @@ package org.example.curs_bd;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,12 +11,11 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class ServicesAddController implements Initializable {
-    Cars car = null;
-    ObservableList<Services> servicesList = FXCollections.observableArrayList();
+    private Cars car = null;
+    private ObservableList<Services> servicesList = FXCollections.observableArrayList();
 
     @FXML
     private Button add;
@@ -47,6 +45,9 @@ public class ServicesAddController implements Initializable {
     private TableColumn<Services, Date> finishCol;
 
     @FXML
+    private TableColumn<Services, Integer> idS;
+
+    @FXML
     private TextField hours;
 
     @FXML
@@ -60,7 +61,7 @@ public class ServicesAddController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        ServicesAddModel.initializeServices(beginCol, finishCol, hoursCol, id_carCol, categoryCol);
+        ServicesAddModel.initializeServices(idS, beginCol, finishCol, hoursCol, id_carCol, categoryCol);
         try {
             ServicesAddModel.getServices(servicesList);
             service.setItems(servicesList);
@@ -80,6 +81,4 @@ public class ServicesAddController implements Initializable {
 
         back.setOnAction(event -> ServicesAddModel.goBack(event));
     }
-
-
 }

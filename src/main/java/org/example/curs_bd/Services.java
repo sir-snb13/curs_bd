@@ -3,13 +3,21 @@ package org.example.curs_bd;
 import java.sql.Date;
 
 public class Services {
+    private int service_id;
     private Date start_date;
     private Date end_date;
     private double hours_worked;
     private int car_id;
     private int employee_id;
-    private int mileage;
     private String category;
+
+    public int getService_id() {
+        return service_id;
+    }
+
+    public void setService_id(int service_id) {
+        this.service_id = service_id;
+    }
 
     public Date getStart_date() {
         return start_date;
@@ -51,14 +59,6 @@ public class Services {
         this.employee_id = employee_id;
     }
 
-    public int getMileage() {
-        return mileage;
-    }
-
-    public void setMileage(int mileage) {
-        this.mileage = mileage;
-    }
-
     public String getCategory() {
         return category;
     }
@@ -67,7 +67,8 @@ public class Services {
         this.category = category;
     }
 
-    public Services(Date start_date, Date end_date, double hours_worked, int car_id, String category) {
+    public Services(int service_id, Date start_date, Date end_date, double hours_worked, int car_id, String category) {
+        this.service_id = service_id;
         this.start_date = start_date;
         this.end_date = end_date;
         this.hours_worked = hours_worked;
