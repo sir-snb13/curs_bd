@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="700.0" style="-fx-background-color: #964b00;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.example.curs_bd.ServicesAddController">
+    <children>
+        <AnchorPane layoutX="13.0" layoutY="14.0" prefHeight="74.0" prefWidth="674.0" style="-fx-background-color: #f5f5dc;">
+            <children>
+                <Label layoutX="240.0" layoutY="14.0" text="Железка-Авто">
+                    <font>
+                        <Font size="30.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+        <AnchorPane layoutX="13.0" layoutY="101.0" prefHeight="285.0" prefWidth="674.0" style="-fx-background-color: #f5f5dc;">
+            <children>
+                <Button fx:id="back" layoutX="14.0" layoutY="40.0" mnemonicParsing="false" text="Выйти" />
+                <TextField fx:id="begin" layoutX="133.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
+                <TextField fx:id="finish" layoutX="215.0" layoutY="48.0" prefHeight="26.0" prefWidth="81.0" />
+                <TextField fx:id="hours" layoutX="297.0" layoutY="48.0" prefHeight="26.0" prefWidth="97.0" />
+                <TextField fx:id="color" layoutX="395.0" layoutY="48.0" onAction="#idCar" prefHeight="26.0" prefWidth="82.0" />
+                <TextField fx:id="category" layoutX="477.0" layoutY="48.0" prefHeight="26.0" prefWidth="82.0" />
+                <Button fx:id="add" layoutX="574.0" layoutY="226.0" mnemonicParsing="false" text="Добавить" />
+                <TableView fx:id="service" layoutX="133.0" layoutY="74.0" prefHeight="200.0" prefWidth="425.0">
+                    <columns>
+                        <TableColumn fx:id="beginCol" prefWidth="81.60003662109375" text="Дата начала" />
+                        <TableColumn fx:id="finishCol" prefWidth="81.60003662109375" text="Дата окончания" />
+                        <TableColumn fx:id="hoursCol" prefWidth="96.79998779296875" text="Кол-во часов" />
+                        <TableColumn fx:id="id_carCol" prefWidth="82.4000244140625" text="id_автомобиля" />
+                        <TableColumn fx:id="categoryCol" prefWidth="81.60000610351562" text="Категория" />
+                    </columns>
+                </TableView>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
